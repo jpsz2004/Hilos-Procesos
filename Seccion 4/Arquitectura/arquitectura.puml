@@ -1,0 +1,40 @@
+@startuml
+
+title Sistema de Procesamiento de Videos (Arquitectura Concurrente)
+
+' === CLIENTES ===
+rectangle "Clientes Premium\n(3 threads)\n\n- Generan trabajos\n- Alta prioridad" as CP
+
+rectangle "Clientes Gratis\n(5 threads)\n\n- Generan trabajos\n- Baja prioridad" as CG
+
+' === COLA ===
+rectangle "Cola Prioritaria Compartida\n\n- Premium Queue\n- Free Queue\n- Condition (sincronización)\n- Contador Premium\n\nResponsabilidad:\n- Prioridad\n- Control de concurrencia\n- Anti-starvation" as Cola
+
+' === WORKERS ===
+rectangle "Workers Pool\n(3 threads)\n\n- Consumen trabajos\n- Procesan videos\n- Ejecución concurrente" as Workers
+
+' === RELACIONES ===
+CP --> Cola : Envía trabajos Premium
+CG --> Cola : Envía trabajos Gratis
+
+Workers --> Cola : Obtiene trabajos
+
+' === NOTAS DE DISEÑO ===
+note right of Cola
+Prioridad:
+Premium > Gratis
+
+Fairness:
+Máx 3 Premium seguidos
+→ luego 1 Gratis
+
+Sincronización:
+threading.Condition
+end note
+
+note bottom of Workers
+Simulación de procesamiento
+usando time.sleep()
+end note
+
+@enduml
