@@ -9,7 +9,7 @@ lock_cuenta = threading.Lock()
 def retirar_dinero(cliente_id, monto):
     global saldo_cuenta
     print(f"Cliente {cliente_id} intenta retirar ${monto}...")
-    if saldo_cuenta >= monto:
+    if saldo_cuenta >= monto: # No hay sincronización aquí, lo que puede llevar a una condición de carrera si varios clientes intentan retirar al mismo tiempo.
         # Simula el tiempo que toma la transacción
         time.sleep(0.1)
         saldo_cuenta -= monto
