@@ -42,7 +42,7 @@ def retirar_dinero(cliente_id, monto):
     global saldo_cuenta
     print(f"Cliente {cliente_id} intenta retirar ${monto}...")
     
-    with lock_cuenta:  # Inicio de sección crítica
+    with lock_cuenta:  # zona critica
         if saldo_cuenta >= monto:
             time.sleep(0.1)  # Simulación dentro del lock (opcional optimizar)
             saldo_cuenta -= monto
